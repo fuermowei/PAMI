@@ -63,19 +63,22 @@ if __name__ == '__main__':
         segmentation=segmentation
     )
 
-    importance_map = ps(model, image, target)
+    importance_map_1 = ps(model, image, target)
+    # importance_map = importance_map / (ps.N + 1e-9)
+    # importance_map[-1, -1] = 1
+    importance_map_2 = ps(model, image, target, importance_map_1)
 
-    importance_map = importance_map / (ps.N + 1e-9)
-    importance_map[-1, -1] = 1
     # importance_map = Image.fromarray(np.uint8(importance_map * 255))
 
     # importance_map = (importance_map - importance_map.min()) / (importance_map.max() - importance_map.min() + 1e-9)
 
     plt.figure()
-    fig, axes = plt.subplots(1, 2)
+    fig, axes = plt.subplots(1, 3)
     axes[0].imshow(img)
     axes[0].axis('off')
-    axes[1].imshow(importance_map)
+    axes[1].imshow(importance_map_1)
     axes[1].axis('off')
+    axes[2].imshow(importance_map_2)
+    axes[2].axis('off')
     plt.show()
 

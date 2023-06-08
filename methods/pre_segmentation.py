@@ -6,6 +6,7 @@ import torch.nn.functional as F
 import torch.nn as nn
 import matplotlib.pyplot as plt
 from functional.model_utils import freeze_model
+import torchvision.transforms as tf
 
 
 class PreSegmentation:
@@ -21,6 +22,7 @@ class PreSegmentation:
         self.mini_batch = mini_batch
         self.substrate = substrate
         self.N = None
+        self.toTensor = tf.ToTensor()
 
     @torch.no_grad()
     def get_score_dilate(self, slice_batch):
