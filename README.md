@@ -2,6 +2,11 @@
 This is the repository for Pytorch Implementation of "PAMI: Partition input and Aggregate outputs for Model Interpretation". You are welcome to raise any questions or concerns about this repository in this issue, and the authors will respond as soon as possible.
 
 ## Modules
+In addition to the main branch, there are four other branches in the repository.
+- functional: It contains some useful functions such as visualization, smoothing, and other operations.
+- methods: They also contain the code for the methods used in the comparative experiments in our paper.
+- experiment: It contains the code for experiments such as pointing game and insertion game.
+- images: The original images used for demonstration in the paper are provided here for users' convenience.
 
 ## Requirements
 - Install pytorch, torchvision
