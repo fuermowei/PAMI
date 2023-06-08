@@ -65,7 +65,7 @@ augumentation = [Identity(),
                  Shift((30, 0)), Shift((0, 30)), Shift((-30, 0)), Shift((0, -30)),
                  Shift((24, 0)), Shift((0, 24)), Shift((-24, 0)), Shift((0, -24))]
          
-from functional import felzenszwalb, slic, SEEDS, watershed_sobel
+from functional import felzenszwalb, slic, SEEDS, watershed_sobel, blur
 segmentation = [
             (felzenszwalb, {'scale': 250, 'sigma': 0.8, 'min_size': 28 * 28}),
             (felzenszwalb, {'scale': 200, 'sigma': 0.8, 'min_size': 28 * 28}),
@@ -89,8 +89,9 @@ segmentation = [
             (watershed_sobel, {'markers': 30, 'compactness': 0.0001})
         ]
 
-                
+blur_f = blur(49, 100)
 ours = PAMI(transformer=tf.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD),
+            substrate=blur,
             segmentation=segmentation,
             augmentation=augumentation, mini_batch=90)
 ```
