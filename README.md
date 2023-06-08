@@ -43,8 +43,16 @@ target = torch.LongTensor([cls])
 
 
 ## Step 3: Setting hyper-parameters
-
+Import our method and setting hyperparameters for it.
+There are approximately four aspects to the settings of the method:
+- Transformations needed for the image afterwards, such as normalization.
+- Settings for the segmentation method, which can be referenced through external functions. 
+- Masking method, such as black/white/blur as mentioned in the paper, which can be replaced by more possible methods in the future (e.g. using generative networks for filling).
+- 
 ```
 
 ```
 
+## Step 4: Running the method
+
+## Step 5: Visualizing the results
