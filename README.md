@@ -52,11 +52,47 @@ target = torch.LongTensor([cls])
 Import our method and setting hyper-parameters for it.
 There are approximately four aspects to the settings of the method:
 - Transformations needed for the image afterwards, such as normalization.
-- Settings for the segmentation method, which can be referenced through external functions. You can use PAMI.set_segmentation((method, {hyper-parameters})) to add your segmentation method, as long as the method can return a superpixel segmentation label map with the same dimensions as the input image and numbering starting from 1. For example, PAMI.set_segmentation(felzenszwalb, {'scale': 250, 'sigma': 0.8, 'min_size': 28 * 28})).
+- Settings for the segmentation method, which can be referenced through external functions. You can use PAMI.segmentation.append((method, {hyper-parameters})) to add your segmentation method, as long as the method can return a superpixel segmentation label map with the same dimensions as the input image and numbering starting from 1. For example, PAMI.segmentation.append(felzenszwalb, {'scale': 250, 'sigma': 0.8, 'min_size': 28 * 28})).
 - Masking method, such as black/white/blur as mentioned in the paper, which can be replaced by more possible methods in the future (e.g. using generative networks for filling). It is controlled through the substrate parameter, and we provide corresponding functions in the file as options.
 - We recommend using a weakly augmented version of the input image that was used during model training (e.g. translation, cropping, rotation, smoothing) to generate more diverse superpixel regions. Therefore, we have implemented functions related to data augmentation to further assist in achieving this step. These functions can also be defined by the user, and they need to implement a forward function (corresponding to the function of data augmentation) and a backward function (which can match the obtained heatmap to the corresponding position in the original image).
 ```
+from Augmentation.Identity import Identity
+from Augmentation.Shift import Shift
+from Aug_BatchRun import Ours
+from Aug_Batchrun_Twostage import Ours as Ours2
+augumentation = [Identity(),
+                 Shift((36, 0)), Shift((0, 36)), Shift((-36, 0)), Shift((0, -36)),
+                 Shift((30, 0)), Shift((0, 30)), Shift((-30, 0)), Shift((0, -30)),
+                 Shift((24, 0)), Shift((0, 24)), Shift((-24, 0)), Shift((0, -24))]
+         
+from functional import felzenszwalb, slic, SEEDS, watershed_sobel
+segmentation = [
+            (felzenszwalb, {'scale': 250, 'sigma': 0.8, 'min_size': 28 * 28}),
+            (felzenszwalb, {'scale': 200, 'sigma': 0.8, 'min_size': 28 * 28}),
+            (felzenszwalb, {'scale': 150, 'sigma': 0.8, 'min_size': 28 * 28}),
+            (felzenszwalb, {'scale': 100, 'sigma': 0.8, 'min_size': 28 * 28}),
+            (felzenszwalb, {'scale': 70, 'sigma': 0.8, 'min_size': 28 * 28}),
+            (felzenszwalb, {'scale': 50, 'sigma': 0.8, 'min_size': 28 * 28}),
+            (slic, {'n_segments': 10, 'compactness': 20}),
+            (slic, {'n_segments': 20, 'compactness': 20}),
+            (slic, {'n_segments': 30, 'compactness': 20}),
+            (slic, {'n_segments': 40, 'compactness': 20}),
+            (slic, {'n_segments': 50, 'compactness': 20}),
+            (slic, {'n_segments': 60, 'compactness': 20}),
+            (slic, {'n_segments': 70, 'compactness': 20}),
+            (slic, {'n_segments': 80, 'compactness': 20}),
+            (SEEDS, {'num_superpixels': 10, 'num_levels': 5, 'n_iter': 10}),
+            (SEEDS, {'num_superpixels': 20, 'num_levels': 5, 'n_iter': 10}),
+            (SEEDS, {'num_superpixels': 30, 'num_levels': 5, 'n_iter': 10}),
+            (watershed_sobel, {'markers': 10, 'compactness': 0.0001}),
+            (watershed_sobel, {'markers': 20, 'compactness': 0.0001}),
+            (watershed_sobel, {'markers': 30, 'compactness': 0.0001})
+        ]
 
+                
+ours = PAMI(transformer=tf.Normalize(IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD),
+            segmentation=segmentation,
+            augmentation=augumentation, mini_batch=90)
 ```
 
 ## Step 4: Running the method
