@@ -53,7 +53,7 @@ There are approximately four aspects to the settings of the method:
 - Transformations needed for the image afterwards, such as normalization.
 - Settings for the segmentation method, which can be referenced through external functions. You can use PAMI.set_segmentation((method, {hyper-parameters})) to add your segmentation method, as long as the method can return a superpixel segmentation label map with the same dimensions as the input image and numbering starting from 1. For example, PAMI.set_segmentation(felzenszwalb, {'scale': 250, 'sigma': 0.8, 'min_size': 28 * 28})).
 - Masking method, such as black/white/blur as mentioned in the paper, which can be replaced by more possible methods in the future (e.g. using generative networks for filling). It is controlled through the substrate parameter, and we provide corresponding functions in the file as options.
-- 
+- We recommend using a weakly augmented version of the input image that was used during model training (e.g. translation, cropping, rotation, smoothing) to generate more diverse superpixel regions. Therefore, we have implemented functions related to data augmentation to further assist in achieving this step. These functions can also be defined by the user, and they need to implement a forward function (corresponding to the function of data augmentation) and a backward function (which can match the obtained heatmap to the corresponding position in the original image).
 ```
 
 ```
@@ -63,8 +63,8 @@ The method can be run once or multiple times.
 During runtime, in addition to the model, image, and label, we also provide a heatmap (optional). If a heatmap is provided, the segmentation algorithm will use the heatmap as input for segmentation instead of the image.
 
 ```
-ours(model, image, target) # for run once
-ours(model, image, target, heatmap) # for run multiple times
+heatmap = ours(model, image, target) # for run once
+heatmap = ours(model, image, target, heatmap) # for run multiple times
 ```
 
 ## Step 5: Visualizing the results
