@@ -60,7 +60,11 @@ There are approximately four aspects to the settings of the method:
 
 ## Step 4: Running the method
 The method can be run once or multiple times.
+During runtime, in addition to the model, image, and label, we also provide a heatmap (optional). If a heatmap is provided, the segmentation algorithm will use the heatmap as input for segmentation instead of the image.
+
 ```
+ours(model, image, target) # for run once
+ours(model, image, target, heatmap) # for run multiple times
 ```
 
 ## Step 5: Visualizing the results
