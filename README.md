@@ -15,6 +15,7 @@ In addition to the main branch, there are four other branches in the repository.
 
 ## Method
 ![MainMap](https://github.com/fuermowei/PAMI/assets/47769416/65d4a763-936a-433d-b19f-9cd5934d85fd)
+The above figure is the framework of our method. For specific method details, please refer to our submitted responses or manuscript. Earlier versions can be found at https://arxiv.org/abs/2302.03318.
 
 ## Step 1: Model preparation
 Loading a pre-trained model and adjusting it to inference mode. Meanwhile, freezing the parameter updates can effectively reduce the computation time.
