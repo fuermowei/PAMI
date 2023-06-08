@@ -43,11 +43,11 @@ target = torch.LongTensor([cls])
 
 
 ## Step 3: Setting hyper-parameters
-Import our method and setting hyperparameters for it.
+Import our method and setting hyper-parameters for it.
 There are approximately four aspects to the settings of the method:
 - Transformations needed for the image afterwards, such as normalization.
-- Settings for the segmentation method, which can be referenced through external functions. 
-- Masking method, such as black/white/blur as mentioned in the paper, which can be replaced by more possible methods in the future (e.g. using generative networks for filling).
+- Settings for the segmentation method, which can be referenced through external functions. You can use PAMI.set_segmentation((method, {hyper-parameters})) to add your segmentation method, as long as the method can return a superpixel segmentation label map with the same dimensions as the input image and numbering starting from 1. For example, PAMI.set_segmentation(felzenszwalb, {'scale': 250, 'sigma': 0.8, 'min_size': 28 * 28})).
+- Masking method, such as black/white/blur as mentioned in the paper, which can be replaced by more possible methods in the future (e.g. using generative networks for filling). It is controlled through the substrate parameter, and we provide corresponding functions in the file as options.
 - 
 ```
 
