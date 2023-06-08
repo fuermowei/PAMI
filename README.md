@@ -54,5 +54,13 @@ There are approximately four aspects to the settings of the method:
 ```
 
 ## Step 4: Running the method
+The method can be run once or multiple times.
+```
+```
 
 ## Step 5: Visualizing the results
+The output results need to be visualized, and we provide two visualization options. It's worth noting that there is not only one visualization method, for example, color enhancement or stretching within a certain range can also be used.
+- Average visualization, since our method uses predicted probabilities, the average contribution of each pixel to the model's output probability is between 0 and 1. If we directly map probability 0 to 0 pixel intensity and probability 1 to 255 pixel intensity, this approach can well reflect the absolute importance of pixels to the model.
+- Normalization visualization, by converting the image to Y = (X - min(X)) / (max(X) - min(X) + delta), where delta is a small positive constant to avoid division by zero. This approach can better display the relative importance within the image.
+```
+```
